@@ -20,6 +20,6 @@ supervizor app.js
 ## View it in your browser
 
 Simply type http://localhost:1337
-(no need for apache running ^)
+(no need for apache running)
 
 > Copyright (c) 2012 Nicolas Chenet
