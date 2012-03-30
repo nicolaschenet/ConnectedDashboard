@@ -1,0 +1,40 @@
+doctype 5
+html(lang="en")
+  head
+    meta(charset    = "utf-8")
+    meta(http-equiv = "X-UA-Compatible",    content= "IE=edge,chrome=1")
+    meta(name       = "description",        content= "A connected dashboard using lots of APIs ;)")
+    meta(name       = "author",             content= author)
+    meta(name       = "viewport",           content= "width=device-width")
+    title #{page_title}
+    link(rel="stylesheet", href="static/less/style.css")
+  body
+    a(href="#{github_repo}", target="_blank")
+      img.fork-me(src="https://a248.e.akamai.net/assets.github.com/img/30f550e0d38ceb6ef5b81500c64d970b7fb0f028/687474703a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6f72616e67655f6666373630302e706e67", alt="Fork me on GitHub")
+    .navbar.navbar-fixed-top
+      .navbar-inner
+        .container
+          a.btn.btn-navbar(href="#", data-toggle="collapse", data-target=".nav-collapse")
+            span.icon-bar
+            span.icon-bar
+            span.icon-bar
+          a.brand(href="#") ConnectedDashboard
+    .container
+      h1 #{page_title}
+      block content
+      hr
+      footer
+        p
+          &copy; #{author}
+  script(src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js")
+  script window.jQuery || document.write('<script src="static/js/libs/jquery-1.7.1.min.js"><\\/script>')
+  script(src="static/js/libs/bootstrap/transition.js")
+  script(src="static/js/libs/bootstrap/collapse.js")
+  script(src="static/js/plugins.js")
+  script(src="static/js/script.js")
+  script(src="socket.io/socket.io.js")
+  script
+    var socket = io.connect();
+    socket.on('connected', function(data){
+      console.log(data.message);
+    });
