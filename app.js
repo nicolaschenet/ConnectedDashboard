@@ -21,7 +21,7 @@ app.use('/static', express.static(__dirname + '/static'));
 app.listen(1337);
 
 app.get('/', function (req, res) {
-  res.render('index', { page_title :  'Welcome to ConnectedDashboard' });
+  res.render('index', { page_title : 'Welcome to Connected Dashboard' });
 });
 
 io.sockets.on('connection', function (socket) {
