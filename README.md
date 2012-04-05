@@ -19,7 +19,10 @@ supervizor app.js
 
 ## View it in your browser
 
-Simply type http://localhost:1337
+Simply type http://localhost:3000
 (no need for apache running)
+
+## Dependencies
+ExpressJS / Jade / Less / Socket.io
 
 > Copyright (c) 2012 Nicolas Chenet
