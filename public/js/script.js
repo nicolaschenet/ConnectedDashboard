@@ -10,7 +10,7 @@ $(document).ready(function() {
     var socket = io.connect();
     socket
         .on('connected', function(data){
-            $('.socket-status').toggleClass('off on');
+            $('.socket-status').removeClass('off').addClass('on');
             console.log(data.message);
         })
         .on('tweet', function(data){
