@@ -11,7 +11,9 @@ html(lang="en")
   body
     include includes/navigation
     .container-fluid
-      h1 #{page_title}
+      h1
+        .socket-status.off
+        | #{page_title}
       .row-fluid
         .span8
           block tweets
