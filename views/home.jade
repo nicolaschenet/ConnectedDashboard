@@ -10,5 +10,20 @@ block maincontent
       | &raquo;
     small John M. Richardson, Jr.
 
+prepend secondarycontent
+  h3 Changelog :
+  ul.unstyled
+    li
+      strong Apr. 05, 2012:
+      |  Added Twitter live push
+  h3 What's this ?
+  p
+    | Hey! This little side project will grab various APIs, and display live information thanks to
+    a(href="http://socket.io", target="_blank") Socket.io
+  p
+    | Feel free to fork the project on
+    a(href="http://github.com", target="_blank") GitHub
+    , and play with it ;)
+
 block tweets
     ul.unstyled.tweets

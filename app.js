@@ -10,6 +10,7 @@ var express     = require('express')
   , TwitterNode = require('twitter-node').TwitterNode
   , sys         = require('util');
 
+
 /**
  * Configuration
  */
@@ -19,8 +20,6 @@ var app_settings = {
     author :      'Nicolas Chenet'
   , github_repo : 'https://github.com/nicolaschenet/ConnectedDashboard'
 }
-
-
 
 app.configure(function(){
   app.set('views', __dirname + '/views');
@@ -44,10 +43,6 @@ app.configure('development', function(){
 app.configure('production', function(){
   app.use(express.errorHandler());
 });
-
-
-
-
 
 
 // Routes
