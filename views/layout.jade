@@ -1,0 +1,23 @@
+doctype 5
+html(lang="en")
+  head
+    meta(charset    = "utf-8")
+    meta(http-equiv = "X-UA-Compatible",    content= "IE=edge,chrome=1")
+    meta(name       = "description",        content= "A connected dashboard using lots of APIs ;)")
+    meta(name       = "author",             content= settings.author)
+    meta(name       = "viewport",           content= "width=device-width")
+    title #{page_title}
+    link(rel="stylesheet", href="less/style.css")
+  body
+    include includes/navigation
+    .container-fluid
+      h1 #{page_title}
+      .row-fluid
+        .span8
+          block maincontent
+        .span4
+          block secondarycontent
+            include includes/defaults/secondarycontent
+      include includes/footer
+  block javascripts
+    include includes/scripts
