@@ -1,6 +1,14 @@
+
+/**
+ * Module dependencies.
+ */
+
 var express = require('express')
-  , app     = express.createServer()
+  , routes  = require('./routes/store')
+  , app     = module.exports = express.createServer()
   , io      = require('socket.io').listen(app);
+
+// Configuration
 
 var app_settings = {
     author :      'Nicolas Chenet'
@@ -8,20 +16,34 @@ var app_settings = {
 }
 
 app.configure(function(){
-    app.set('views', __dirname + '/views');
-    app.set('view engine', 'jade');
-    app.set('view options', {
-      layout : false,
-      settings : app_settings
-    });
+  app.set('views', __dirname + '/views');
+  app.set('view engine', 'jade');
+  app.set('view options', {
+    layout : false,
+    settings : app_settings
+  });
+  app.use(express.bodyParser());
+  app.use(express.methodOverride());
+  app.use(express.cookieParser());
+  app.use(express.session({ secret: 'your secret here' }));
+  app.use(app.router);
+  app.use(express.static(__dirname + '/public'));
 });
 
-app.use('/static', express.static(__dirname + '/static'));
+app.configure('development', function(){
+  app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
+});
 
-app.listen(1337);
+app.configure('production', function(){
+  app.use(express.errorHandler());
+});
 
-app.get('/', function (req, res) {
-  res.render('index', { page_title : 'Welcome to Connected Dashboard' });
+// Routes
+
+app.get('/', routes.home);
+
+app.listen(3000, function(){
+  console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
 });
 
 io.sockets.on('connection', function (socket) {
