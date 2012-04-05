@@ -10,7 +10,6 @@ var express     = require('express')
   , TwitterNode = require('twitter-node').TwitterNode
   , sys         = require('util');
 
-
 /**
  * Configuration
  */
@@ -53,15 +52,25 @@ app.listen(3000, function(){
   console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
 });
 
+
 io.sockets.on('connection', function (socket) {
   socket.emit('connected', {
     message: 'Socket is now connected. Enjoy, guys ! ;)'
   });
 
   var twit = new TwitterNode({
-      user:     /* Twitter screenname */
-    , password: /* Twitter password */
-    , follow:   [83561264]
+      user:     'twitter_screen_name'
+    , password: 'twitter_password'
+    , track:    ['ConnectedDashboard, balloon']
+    , follow: [
+          83561264  // @nicolaschenet
+        , 142254877 // @guillaumepotier
+        , 65804544  // @arcanis
+        , 209020852 // @CeD_EF
+        , 98431545  // @balloon
+        , 42241156  // @Romaind
+        , 295052629 // @ToGeoffreyh
+    ]
   });
 
   twit.addListener('error', function(error) {
@@ -88,5 +97,6 @@ io.sockets.on('connection', function (socket) {
       sys.puts("wave goodbye... " + resp.statusCode);
     })
     .stream();
+
 
 });

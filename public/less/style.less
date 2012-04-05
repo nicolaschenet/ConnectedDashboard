@@ -12,57 +12,74 @@ body {
 
 .container-fluid {
     h1 {
-        margin-bottom: 18px;
+        margin-bottom: 20px;
     }
 
     h3 {
-        margin-bottom: 9px;
+        margin-bottom: 10px;
     }
 
-    ul.tweets {
-        li {
-            display: none;
-            color: #333;
-            font-size: 1.2em;
-            position: relative;
-            padding-left: 70px;
-            border-bottom: solid 1px #E5E5E5;
-            padding-bottom: 10px;
-            min-height: 58px;
-            margin: 12px 0;
+    h4 {
+        margin-top: 10px;
+        margin-bottom: 5px;
+    }
 
-            &:last-child {
-                border: none;
-            }
+    .tweets {
+        position: relative;
 
-            img {
-                position: absolute;
-                top: 0;
-                left: 0;
-                padding: 3px;
-                background: white;
-                border: solid 1px #CCC;
-                top: 0;
-                left: 0px;
-                .border-radius(2px);
-                .box-shadow(0 0 5px #dedede);
-            }
+        p.no-tweet {
+            position: absolute;
+            color: #aaa;
+            font-size: 1.1em;
+        }
 
-            a {
-                color: #000;
-                font-weight: bold;
-                text-decoration: none;
-                &:hover {
-                    color: @linkColor;
+        ul.live-tweets {
+
+            li {
+                display: none;
+                color: #333;
+                font-size: 1.2em;
+                position: relative;
+                padding-left: 70px;
+                border-bottom: solid 1px #E5E5E5;
+                padding-bottom: 10px;
+                min-height: 58px;
+                margin: 12px 0;
+
+                &:last-child {
+                    border: none;
                 }
-            }
 
-            small {
-                display: block;
-                color: #999;
-                font-size: .75em;
-                margin-top: 3px;
-                font-style: italic;
+                img {
+                    width: 50px;
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    padding: 3px;
+                    background: white;
+                    border: solid 1px #CCC;
+                    top: 0;
+                    left: 0px;
+                    .border-radius(2px);
+                    .box-shadow(0 0 5px #dedede);
+                }
+
+                a {
+                    color: #000;
+                    font-weight: bold;
+                    text-decoration: none;
+                    &:hover {
+                        color: @linkColor;
+                    }
+                }
+
+                small {
+                    display: block;
+                    color: #999;
+                    font-size: .75em;
+                    margin-top: 3px;
+                    font-style: italic;
+                }
             }
         }
     }

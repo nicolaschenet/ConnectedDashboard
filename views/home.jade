@@ -1,29 +1,31 @@
 extends layout
 
-block maincontent
-  blockquote
-    p
-      | &laquo;
-      | When it comes to the future, there are three kinds of people:
-      | those who let it happen, those who make it happen,
-      | and those who wonder what happened.
-      | &raquo;
-    small John M. Richardson, Jr.
-
-prepend secondarycontent
-  h3 Changelog :
-  ul.unstyled
-    li
-      strong Apr. 05, 2012:
-      |  Added Twitter live push
-  h3 What's this ?
-  p
-    | Hey! This little side project will grab various APIs, and display live information thanks to
-    a(href="http://socket.io", target="_blank") Socket.io
-  p
-    | Feel free to fork the project on
-    a(href="http://github.com", target="_blank") GitHub
-    , and play with it ;)
-
 block tweets
-    ul.unstyled.tweets
+  section.tweets
+    header
+      h3 Live tweets
+    p.no-tweet
+      | Whoops :( There are no tweets to display at the moment ...
+    ul.unstyled.live-tweets
+
+append secondarycontent
+  section
+    header
+      h4 Changelog :
+    ul.unstyled
+      li
+        strong Apr. 05, 2012:
+        |  Added Twitter live push
+  article
+    header
+      h4 What's this ?
+    p
+      | Hey! This little side project will grab various APIs, and display live information thanks to
+      a(href="http://socket.io", target="_blank") Socket.io
+    p
+      | Feel free to fork the project on
+      a(href="http://github.com", target="_blank") GitHub
+      , and play with it ;)
+  a.btn.btn-success(href="#{settings.github_repo}", target="_blank")
+    i.icon-download-alt.icon-white
+    |  Fork me on Github
