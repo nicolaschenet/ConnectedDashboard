@@ -3,17 +3,24 @@
  * Module dependencies.
  */
 
-var express = require('express')
-  , routes  = require('./routes/store')
-  , app     = module.exports = express.createServer()
-  , io      = require('socket.io').listen(app);
+var express     = require('express')
+  , routes      = require('./routes/store')
+  , app         = module.exports = express.createServer()
+  , io          = require('socket.io').listen(app)
+  , TwitterNode = require('twitter-node').TwitterNode
+  , sys         = require('util');
 
-// Configuration
+/**
+ * Configuration
+ */
 
+// Generic config
 var app_settings = {
     author :      'Nicolas Chenet'
   , github_repo : 'https://github.com/nicolaschenet/ConnectedDashboard'
 }
+
+
 
 app.configure(function(){
   app.set('views', __dirname + '/views');
@@ -38,6 +45,11 @@ app.configure('production', function(){
   app.use(express.errorHandler());
 });
 
+
+
+
+
+
 // Routes
 
 app.get('/',  routes.home);
@@ -50,4 +62,36 @@ io.sockets.on('connection', function (socket) {
   socket.emit('connected', {
     message: 'Socket is now connected. Enjoy, guys ! ;)'
   });
+
+  var twit = new TwitterNode({
+      user:     /* Twitter screenname */
+    , password: /* Twitter password */
+    , follow:   [83561264]
+  });
+
+  twit.addListener('error', function(error) {
+    console.log(error.message);
+  });
+
+  twit
+    .addListener('tweet', function(tweet) {
+      sys.puts("@" + tweet.user.screen_name + ": " + tweet.text);
+      socket.emit('tweet', {
+          message : JSON.stringify(tweet)
+      });
+    })
+    .addListener('limit', function(limit) {
+      sys.puts("LIMIT: " + sys.inspect(limit));
+    })
+    .addListener('delete', function(del) {
+      sys.puts("DELETE: " + sys.inspect(del));
+      socket.emit('tweet_deleted', {
+        message: del
+      });
+    })
+    .addListener('end', function(resp) {
+      sys.puts("wave goodbye... " + resp.statusCode);
+    })
+    .stream();
+
 });

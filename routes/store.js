@@ -4,5 +4,5 @@
  */
 
 exports.home = function(req, res){
-  res.render('home', { page_title: 'Express' })
+  res.render('home', { page_title: 'Welcome to Connected Dashboard' })
 };
