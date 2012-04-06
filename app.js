@@ -54,6 +54,7 @@ app.listen(3000, function(){
 
 
 io.sockets.on('connection', function (socket) {
+
   socket.emit('connected', {
     message: 'Socket is now connected. Enjoy, guys ! ;)'
   });
@@ -97,6 +98,5 @@ io.sockets.on('connection', function (socket) {
       sys.puts("wave goodbye... " + resp.statusCode);
     })
     .stream();
-
 
 });

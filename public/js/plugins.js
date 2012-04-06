@@ -9,3 +9,26 @@ window.log = function f(){ log.history = log.history || []; log.history.push(arg
 
 // place any jQuery/helper plugins in here, instead of separate, slower script files.
 
+function tweetPlaceholderToggle() {
+    $('.tweets li').length == 0 ? $('.no-tweet').fadeIn("slow") : $('.no-tweet').fadeOut("slow");
+}
+
+String.prototype.parseURL = function() {
+    return this.replace(/[A-Za-z]+:\/\/[A-Za-z0-9-_]+\.[A-Za-z0-9-_:%&~\?\/.=]+/g, function(url) {
+        return '<a href="'+url+'" target="_blank">'+url+'</a>';
+    });
+};
+
+String.prototype.parseUsername = function() {
+    return this.replace(/[@]+[A-Za-z0-9-_]+/g, function(u) {
+        var username = u.replace("@","")
+        return '<a href="https://twitter.com/#!/'+username+'" class="username" target="_blank">@'+username+'</a>';
+    });
+};
+
+String.prototype.parseHashtag = function() {
+    return this.replace(/[#]+[A-Za-z0-9-_]+/g, function(t) {
+        var tag = t.replace("#","")
+        return '<a href="https://twitter.com/#!/search/%23'+tag+'" class="hashtag" target="_blank">#'+tag+'</a>';
+    });
+};

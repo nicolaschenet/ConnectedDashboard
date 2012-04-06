@@ -2,10 +2,6 @@
     Nicolas Chenet - nicolas@balloonup.com
 */
 
-function tweetPlaceholder() {
-    $('.tweets li').length == 0 ? $('.no-tweet').fadeIn("slow") : $('.no-tweet').fadeOut("slow");
-}
-
 $(document).ready(function() {
     var socket = io.connect();
     socket
@@ -20,10 +16,10 @@ $(document).ready(function() {
                 .addClass('tweet_'+tweet.id)
                 .html(
                     '<img src="'+tweet.user.profile_image_url+'" alt="'+tweet.user.screen_name+' says..." />'
-                +   '<a href="https://twitter.com/#!/'+tweet.user.screen_name+'" target="_blank">'
+                +   '<a href="https://twitter.com/#!/'+tweet.user.screen_name+'" class="author" target="_blank">'
                 +       '@'+tweet.user.screen_name+': '
                 +   '</a>'
-                +   tweet.text
+                +   tweet.text.parseURL().parseUsername().parseHashtag()
                 +   '<small>'
                 +       tweet.created_at
                 +   '</small>'
@@ -35,7 +31,7 @@ $(document).ready(function() {
             var deleted_tweet = data.message.status;
             $('.tweet_'+deleted_tweet.id).fadeOut("slow", function(){
                 $(this).remove();
-                tweetPlaceholder();
+                tweetPlaceholderToggle();
             });
         });
 });

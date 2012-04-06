@@ -76,13 +76,15 @@ body {
                     .border-radius(2px);
                     .box-shadow(0 0 5px #dedede);
                 }
-
                 a {
-                    color: #000;
-                    font-weight: bold;
                     text-decoration: none;
-                    &:hover {
-                        color: @linkColor;
+
+                    &.author {
+                        color: #000;
+                        font-weight: bold;
+                        &:hover {
+                            color: @linkColor;
+                        }
                     }
                 }
 
