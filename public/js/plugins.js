@@ -10,7 +10,7 @@ window.log = function f(){ log.history = log.history || []; log.history.push(arg
 // place any jQuery/helper plugins in here, instead of separate, slower script files.
 
 function tweetPlaceholderToggle() {
-    $('.tweets li').length == 0 ? $('.no-tweet').fadeIn("slow") : $('.no-tweet').fadeOut("slow");
+    $('.tweets li').length == 0 ? $('.no-tweet').fadeIn("slow").css('position','relative') : $('.no-tweet').css('position','relative').fadeOut("slow");
 }
 
 String.prototype.parseURL = function() {

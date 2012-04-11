@@ -10,7 +10,7 @@ $(document).ready(function() {
             console.log(data.message);
         })
         .on('tweet', function(data){
-            $('.no-tweet').fadeOut("slow");
+            $('.no-tweet').css('position','absolute').fadeOut("slow");
             var tweet = JSON.parse(data.message);
             $('<li></li>')
                 .addClass('tweet_'+tweet.id)
