@@ -49,8 +49,8 @@ app.configure('production', function(){
 // Twitter configuration
 
 var twit = new TwitterNode({
-    user:     'nicolaschenet'
-  , password: 'ha6vr851'
+    user:     'username'
+  , password: 'pass'
   , track:  [
         'ConnectedDashboard'
   ]
