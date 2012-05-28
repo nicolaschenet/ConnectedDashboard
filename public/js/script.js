@@ -33,6 +33,23 @@ $(document).ready(function() {
                 $(this).remove();
                 tweetPlaceholderToggle();
             });
+        })
+        .on('instagram', function(data){
+            var ig_newmedia = JSON.parse(data.message);
+            var media = ig_newmedia.media;
+            console.log('New update for channel : '+ig_newmedia.channelName);
+            $('.live-instagram-pics li').remove();
+            for (medium in media) {
+                $('<li></li>')
+                    .addClass('instagram_pic_'+media[medium].id)
+                    .html(
+                        '<a href="'+media[medium].images.standard_resolution.url+'" target="_blank" title="Shot by '+media[medium].user.full_name+', using the '+media[medium].filter+' filter">'
+                    +       '<img src="'+media[medium].images.thumbnail.url+'" alt="Shot by '+media[medium].user.full_name+', using the '+media[medium].filter+' filter" />'
+                    +   '</a>'
+                    )
+                    .appendTo('.live-instagram-pics')
+                    .fadeIn("slow");
+            }
         });
 });
 

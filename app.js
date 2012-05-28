@@ -1,70 +1,21 @@
-
-/**
- * Module dependencies.
- */
-
-var express     = require('express')
-  , routes      = require('./routes/store')
-  , app         = module.exports = express.createServer()
-  , io          = require('socket.io').listen(app)
-  , TwitterNode = require('twitter-node').TwitterNode
-  , sys         = require('util');
-
-
-/**
- * Configuration
- */
-
-// App configuration
-
-var app_settings = {
-    author :      'Nicolas Chenet'
-  , github_repo : 'https://github.com/nicolaschenet/ConnectedDashboard'
-}
-
-app.configure(function(){
-  app.set('views', __dirname + '/views');
-  app.set('view engine', 'jade');
-  app.set('view options', {
-    layout : false,
-    settings : app_settings
-  });
-  app.use(express.bodyParser());
-  app.use(express.methodOverride());
-  app.use(express.cookieParser());
-  app.use(express.session({ secret: 'thisisnotsosecret' }));
-  app.use(app.router);
-  app.use(express.static(__dirname + '/public'));
-});
-
-app.configure('development', function(){
-  app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
-});
-
-app.configure('production', function(){
-  app.use(express.errorHandler());
-});
+var url                     = require('url')
+  , routes                  = require('./routes/store')
+  , sys                     = require('util')
+  , fs                      = require('fs')
+  , main_settings           = require('./main_settings')
+  , twitter_settings        = require('./twitter_settings')
+  , instagram_settings      = require('./instagram_settings')
+  , instagram_helpers       = require('./instagram_helpers')
+  , instagram_subscriptions = 'channel:*'
+  , crypto                  = require('crypto');
 
 
-// Twitter configuration
+var app   = main_settings.app
+  , io    = main_settings.io;
 
-var twit = new TwitterNode({
-    user:     'username'
-  , password: 'pass'
-  , track:  [
-        'ConnectedDashboard'
-  ]
-  , follow: [
-        83561264  // @nicolaschenet
-      , 142254877 // @guillaumepotier
-      , 65804544  // @arcanis
-      , 209020852 // @CeD_EF
-      , 98431545  // @balloon
-      , 42241156  // @Romaind
-      , 295052629 // @ToGeoffreyh
-      , 8314462   // @skruk
-  ]
-});
+var redis = instagram_settings.redis;
+
+var twit  = twitter_settings.twit;
 
 
 /**
@@ -72,6 +23,7 @@ var twit = new TwitterNode({
  */
 
 // Twitter events
+
 
 twit.addListener('error', function(error) {
   console.log(error.message);
@@ -99,6 +51,58 @@ twit
   .stream();
 
 
+// Instagram events
+
+var r = redis.createClient(
+    instagram_settings.REDIS_PORT,
+    instagram_settings.REDIS_HOST);
+r.psubscribe(instagram_subscriptions);
+
+
+r.on('pmessage', function(pattern, channel, message){
+
+    /* Every time we receive a message, we check to see if it matches
+       the subscription pattern. If it does, then go ahead and parse it. */
+
+    if(pattern == instagram_subscriptions){
+        try {
+            var data = JSON.parse(message)['data'];
+            // Channel name is really just a 'humanized' version of a slug
+            // san-francisco turns into san francisco. Nothing fancy, just
+            // works.
+            var channelName = channel.split(':')[1].replace(/-/g, ' ');
+        } catch (e) {
+            return;
+        }
+
+        // Store individual media JSON for retrieval by homepage later
+        for(index in data){
+            var media = data[index];
+            media.meta = {};
+            media.meta.location = channelName;
+            var r = redis.createClient(
+                instagram_settings.REDIS_PORT,
+                instagram_settings.REDIS_HOST);
+            r.lpush('media:objects', JSON.stringify(media));
+            r.quit();
+        }
+
+        // Send out whole update to the listeners
+        var update = {
+            'type': 'newMedia',
+            'media': data,
+            'channelName': channelName
+        };
+
+        io.sockets.emit('instagram', {
+            message : JSON.stringify(update)
+        });
+
+    }
+});
+
+
+
 // Generic socket events
 
 io.sockets.on('connection', function (socket) {
@@ -113,6 +117,49 @@ io.sockets.on('connection', function (socket) {
  */
 
 app.get('/',  routes.home);
+
+app.get('/callbacks/geo/:geoName', function(request, response){
+    // The GET callback for each subscription verification.
+  var params = url.parse(request.url, true).query;
+  response.send(params['hub.challenge'] || 'No hub.challenge present');
+});
+
+
+app.post('/callbacks/geo/:geoName', function(request, response){
+    // The POST callback for Instagram to call every time there's an update
+    // to one of our subscriptions.
+
+    /* No more request.rawBody :/
+
+    // First, let's verify the payload's integrity by making sure it's
+    // coming from a trusted source. We use the client secret as the key
+    // to the HMAC.
+    var hmac = crypto.createHmac('sha1', instagram_settings.IG_CLIENT_SECRET);
+    hmac.update(request.rawBody);
+    var providedSignature = request.headers['x-hub-signature'];
+    var calculatedSignature = hmac.digest(encoding='hex');
+
+    // If they don't match up or we don't have any data coming over the
+    // wire, then bail out early.
+    if((providedSignature != calculatedSignature) || !request.body)
+        response.send('FAIL');
+    */
+
+
+    // Go through and process each update. Note that every update doesn't
+    // include the updated data - we use the data in the update to query
+    // the Instagram API to get the data we want.
+  var updates = request.body;
+  var geoName = request.params.geoName;
+  for(index in updates){
+    var update = updates[index];
+    if(update['object'] == "geography")
+      instagram_helpers.processGeography(geoName, update);
+  }
+  response.send('OK');
+});
+
+
 
 
 /**

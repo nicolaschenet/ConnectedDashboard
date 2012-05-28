@@ -8,17 +8,37 @@ block tweets
       | Whoops :( There are no tweets to display at the moment ...
     ul.unstyled.live-tweets
 
-append secondarycontent
+
+block secondarycontent
+
+  section.instagram-pics
+    header
+      h3 Live from instagram
+    ul.unstyled.live-instagram-pics
+
+  blockquote
+    p
+      | &laquo;
+      | When it comes to the future, there are three kinds of people:
+      | those who let it happen, those who make it happen,
+      | and those who wonder what happened.
+      | &raquo;
+    small John M. Richardson, Jr.
+
   section
     header
       h4 Changelog :
     ul.unstyled
+      li
+        strong May 28, 2012:
+        | Rough Instagram support !!! Live pics from custom subscriptions :)
       li
         strong May 16, 2012:
         |  Multi-client is now supported, yeaahhhh 0/
       li
         strong Apr. 05, 2012:
         |  Added Twitter live push
+
   article
     header
       h4 What's this ?

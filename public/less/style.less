@@ -97,6 +97,36 @@ body {
             }
         }
     }
+
+    .instagram-pics {
+        padding: 10px;
+        background : #fafafa;
+        margin-bottom: 20px;
+        .border-radius(3px);
+
+        p.no-instagram-pics {
+            color: #aaa;
+        }
+
+        ul.live-instagram-pics {
+            .clearfix;
+
+            li {
+                float: left;
+                display: inline;
+                padding: 5px;
+                display: none;
+
+                img {
+                    background: #fff;
+                    border: solid 1px #ddd;
+                    padding: 5px;
+                    width: 102px;
+                    .box-shadow(0 0 5px #eee);
+                }
+            }
+        }
+    }
 }
 
 @import "bootstrap/responsive.less";
